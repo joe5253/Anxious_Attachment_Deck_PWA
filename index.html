@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Anxious Attachment Deck</title>
+<meta name="theme-color" content="#6E8B7B">
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Anxious%20Attachment%20Deck%22,%22short_name%22:%22Anxious%20Attachment%22,%22display%22:%22standalone%22,%22background_color%22:%22%23F6F0E3%22,%22theme_color%22:%22%236E8B7B%22}">
+<style>
+  :root{
+    --sand:#F6F0E3;
+    --sand-soft:#FBF7EE;
+    --euca:#6E8B7B;
+    --euca-deep:#4E6B5C;
+    --euca-mist:#9DB5A8;
+    --gold-sand:#DFCBA4;
+    --gold-deep:#AE9367;
+    --white:#FFFFFF;
+    --ink:#33403A;
+    --ink-soft:#5E6B64;
+    --calm: linear-gradient(135deg, #6E8B7B 0%, #9DB0A0 52%, #DFCBA4 100%);
+    --line: rgba(110,139,123,0.32);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(168deg, #DCE7DF 0%, #F4EEDE 46%, #DBE5DD 100%);
+    color: var(--ink);
+    overflow:hidden;
+  }
+  #app{
+    height:100dvh;
+    width:100vw;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+
+  /* ---------- Gate Screen ---------- */
+  #gate{
+    position:fixed; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background: linear-gradient(168deg, #DCE7DF 0%, #F4EEDE 48%, #DBE5DD 100%);
+    padding:32px; z-index:100; text-align:center;
+  }
+  #gate .gate-emblem{
+    width:58px; height:58px; border-radius:50%;
+    border:1px solid rgba(174,147,103,0.6);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:22px;
+  }
+  #gate .gate-emblem-inner{
+    width:30px; height:30px; border-radius:50%;
+    background: var(--calm);
+    opacity:0.92;
+  }
+  #gate .gate-brand{
+    font-size:0.65rem; letter-spacing:2.5px; text-transform:uppercase; color: var(--euca-deep); opacity:0.9; margin-bottom:10px;
+  }
+  #gate h1{
+    font-size:1.55rem; font-weight:500; letter-spacing:0.5px; margin:0 0 6px;
+    color: var(--ink);
+  }
+  #gate .sub{
+    color: var(--ink-soft); font-size:0.88rem; margin-bottom:36px; letter-spacing:0.4px; opacity:0.85;
+  }
+  #gate input{
+    width:100%; max-width:280px;
+    padding:14px 16px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    background: rgba(255,255,255,0.78);
+    color: var(--ink);
+    font-size:1.05rem;
+    text-align:center;
+    letter-spacing:2px;
+    outline:none;
+    margin-bottom:16px;
+    font-family: inherit;
+  }
+  #gate input::placeholder{ color: rgba(51,64,58,0.35); letter-spacing:1px; }
+  #gate button{
+    width:100%; max-width:280px;
+    padding:14px;
+    border-radius:14px;
+    border:none;
+    background: var(--calm);
+    color: #FFFFFF;
+    font-size:1rem;
+    font-weight:600;
+    letter-spacing:0.5px;
+    cursor:pointer;
+    font-family: inherit;
+    box-shadow: 0 6px 18px rgba(78,107,92,0.35);
+  }
+  #gate button:active{ transform: scale(0.98); }
+  #gate-error{
+    color: var(--gold-deep); font-size:0.82rem; margin-top:14px; min-height:16px; opacity:0.9;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 12px 18px 10px;
+    background: linear-gradient(135deg, rgba(110,139,123,0.16) 0%, rgba(223,203,164,0.14) 100%);
+  }
+  header .title{
+    font-size:1.02rem; letter-spacing:0.4px; font-weight:500; color: var(--ink);
+  }
+  header .title .brand{
+    display:block; font-size:0.6rem; letter-spacing:2.5px; text-transform:uppercase; color: var(--gold-deep); opacity:0.95; margin-bottom:3px; font-weight:500;
+  }
+  header .title .sub{
+    display:block; font-size:0.62rem; letter-spacing:1.5px; text-transform:uppercase; color: var(--ink-soft); opacity:0.75; margin-top:1px; font-weight:400;
+  }
+  #counter{
+    font-size:0.78rem; color: var(--euca-deep); letter-spacing:1px; opacity:0.9;
+    min-width:50px; text-align:right;
+  }
+
+  /* ---------- Nav Tabs ---------- */
+  nav{
+    flex-shrink:0;
+    display:flex; gap:0;
+    padding: 0 14px 10px;
+  }
+  nav button{
+    flex:1;
+    padding:9px 4px;
+    background:transparent;
+    border:none;
+    border-bottom: 2px solid rgba(51,64,58,0.12);
+    color: rgba(51,64,58,0.5);
+    font-size:0.72rem;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+    font-family: inherit;
+    cursor:pointer;
+  }
+  nav button.active{
+    color: var(--ink);
+    border-bottom-color: var(--euca);
+  }
+
+  /* ---------- Main Views ---------- */
+  main{
+    flex:1;
+    min-height:0;
+    overflow:hidden;
+    position:relative;
+  }
+  .view{
+    position:absolute; inset:0;
+    display:none;
+    flex-direction:column;
+    padding: 6px 18px 18px;
+    overflow-y:auto;
+  }
+  .view.active{ display:flex; }
+
+  /* ---------- Draw View ---------- */
+  #draw-view{ align-items:center; justify-content:center; }
+  #card-stage{
+    flex:0 0 auto;
+    width:100%;
+    max-width:400px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    margin-top:4px;
+  }
+  #card{
+    width:100%;
+    max-width:320px;
+    aspect-ratio: 2.75/4.75;
+    max-height: calc(100dvh - 232px);
+    position:relative;
+    cursor:pointer;
+  }
+  .card-face{
+    position:absolute; inset:0;
+    border-radius:20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px 20px;
+    text-align:center;
+    transition: opacity 0.35s ease;
+    box-shadow: 0 16px 40px rgba(78,107,92,0.30);
+    border: 1px solid rgba(255,255,255,0.55);
+  }
+  .card-back{
+    background: linear-gradient(158deg, #6E8B7B 0%, #9DB0A0 48%, #DFCBA4 100%);
+    opacity:1;
+    z-index:2;
+  }
+  .card-back .emblem{
+    width:66px; height:66px;
+    border-radius:50%;
+    border: 1px solid rgba(255,255,255,0.75);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:18px;
+    position:relative;
+  }
+  .card-back .emblem::before{
+    content:"";
+    position:absolute; inset:-9px;
+    border-radius:50%;
+    border:1px solid rgba(246,240,227,0.6);
+  }
+  .card-back .emblem-inner{
+    width:34px; height:34px;
+    border-radius:50%;
+    background: linear-gradient(135deg, var(--sand-soft) 0%, var(--white) 100%);
+    opacity:0.92;
+  }
+  .card-back .deck-name{
+    font-size:0.88rem; letter-spacing:2px; text-transform:uppercase; color: rgba(255,255,255,0.95);
+    line-height:1.7; max-width:210px;
+  }
+  .card-back .tap-hint{
+    position:absolute; bottom:22px; font-size:0.68rem; letter-spacing:1px; color: rgba(255,255,255,0.68);
+  }
+  .card-front{
+    background: linear-gradient(160deg, var(--white) 0%, var(--sand-soft) 50%, #E3EBE2 100%);
+    opacity:0;
+    z-index:1;
+    color: var(--ink);
+    justify-content:center;
+    padding:28px 22px;
+    overflow-y:auto;
+  }
+  .card-front-inner{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding-bottom:28px;
+  }
+  .card-brand-footer{
+    position:absolute;
+    bottom:18px; left:0; right:0;
+    text-align:center;
+    font-size:0.6rem;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    color: var(--gold-deep);
+    opacity:0.65;
+  }
+  #card.flipped .card-back{ opacity:0; z-index:1; }
+  #card.flipped .card-front{ opacity:1; z-index:2; }
+
+  .card-num{
+    position:absolute;
+    top:16px; left:18px;
+    font-size:0.65rem; letter-spacing:2px; color: var(--euca-deep); opacity:0.75; text-transform:uppercase;
+  }
+  .card-title{
+    font-size:1.3rem; font-weight:600; color: var(--euca-deep); margin-bottom:18px; line-height:1.35; letter-spacing:0.2px;
+  }
+  .card-oracle{
+    font-size:0.95rem; line-height:1.68; color: var(--ink); margin-bottom:20px;
+  }
+  .card-divider{
+    width:36px; height:2px; border-radius:2px;
+    background: linear-gradient(90deg, var(--euca) 0%, var(--gold-deep) 100%);
+    opacity:0.9; margin-bottom:16px;
+  }
+  .card-action-label{
+    font-size:0.62rem; letter-spacing:1.5px; text-transform:uppercase; color: var(--euca-deep); margin-bottom:6px; font-weight:600;
+  }
+  .card-action{
+    font-size:0.9rem; line-height:1.55; color: var(--ink-soft); font-weight:500;
+  }
+  .fav-btn{
+    position:absolute; top:14px; right:14px; z-index:3;
+    background:none; border:none; font-size:1.3rem; cursor:pointer;
+    color: rgba(110,139,123,0.55);
+    line-height:1;
+    padding:4px;
+  }
+  #card.flipped .fav-btn{ color: var(--euca); }
+
+  @keyframes shake{
+    0%{ transform: translateX(0) rotate(0); }
+    15%{ transform: translateX(-8px) rotate(-2deg); }
+    30%{ transform: translateX(7px) rotate(2deg); }
+    45%{ transform: translateX(-6px) rotate(-1.5deg); }
+    60%{ transform: translateX(5px) rotate(1.5deg); }
+    75%{ transform: translateX(-3px) rotate(-1deg); }
+    100%{ transform: translateX(0) rotate(0); }
+  }
+  #card.shaking{ animation: shake 0.5s ease; }
+  @media (prefers-reduced-motion: reduce){
+    #card.shaking{ animation:none; }
+    .card-face{ transition:none; }
+  }
+
+  #controls{
+    flex-shrink:0;
+    display:flex; gap:12px;
+    width:100%; max-width:320px;
+    margin-top:8px;
+  }
+  #controls button{
+    flex:1;
+    padding:13px 8px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(244,238,222,0.7) 100%);
+    color: var(--ink);
+    font-size:0.85rem;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    font-family: inherit;
+    cursor:pointer;
+  }
+  #controls button.primary{
+    background: var(--calm);
+    color: #FFFFFF;
+    font-weight:600;
+    border:none;
+    box-shadow: 0 6px 16px rgba(78,107,92,0.35);
+  }
+  #controls button:active{ transform: scale(0.97); }
+
+  /* ---------- Browse / Saved Grid ---------- */
+  .grid-list{
+    display:flex; flex-direction:column; gap:10px; padding-top:8px;
+  }
+  .grid-item{
+    background: linear-gradient(135deg, rgba(255,255,255,0.94) 0%, rgba(219,229,221,0.55) 100%);
+    border: 1px solid var(--line);
+    border-radius:14px;
+    padding:14px 16px;
+    display:flex; align-items:center; justify-content:space-between;
+    cursor:pointer;
+  }
+  .grid-item-text{
+    display:flex; flex-direction:column; gap:2px;
+  }
+  .grid-item-num{
+    font-size:0.62rem; letter-spacing:1.5px; color: var(--gold-deep); opacity:0.95; text-transform:uppercase;
+  }
+  .grid-item-title{
+    font-size:0.92rem; color: var(--ink);
+  }
+  .grid-item-star{
+    font-size:1.1rem; color: var(--euca); flex-shrink:0; margin-left:10px;
+  }
+  .empty-state{
+    text-align:center; color: rgba(51,64,58,0.45); font-size:0.88rem; margin-top:60px; line-height:1.6; padding:0 20px;
+  }
+
+  /* ---------- Toast ---------- */
+  #toast{
+    position:fixed; top:16px; left:50%; transform:translateX(-50%) translateY(-20px);
+    background: rgba(51,64,58,0.92);
+    color: var(--sand-soft);
+    padding:11px 22px;
+    border-radius:30px;
+    font-size:0.82rem;
+    letter-spacing:0.5px;
+    z-index:200;
+    opacity:0;
+    transition: all 0.3s ease;
+    pointer-events:none;
+    border: 1px solid rgba(174,147,103,0.5);
+    white-space:nowrap;
+  }
+  #toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  ::-webkit-scrollbar{ width:0; height:0; }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-emblem"><div class="gate-emblem-inner"></div></div>
+  <div class="gate-brand">PsychicSoulStar</div>
+  <h1>Anxious Attachment Deck</h1>
+  <div class="sub">Steady ground for an anxious heart</div>
+  <input type="text" id="access-input" placeholder="ACCESS CODE" autocomplete="off" autocapitalize="characters">
+  <button id="unlock-btn">Enter</button>
+  <div id="gate-error"></div>
+</div>
+
+<div id="app" style="display:none;">
+  <header>
+    <div class="title"><span class="brand">PsychicSoulStar</span>Anxious Attachment Deck
+      <span class="sub">52-Card Deck</span>
+    </div>
+    <div id="counter">&mdash; / 52</div>
+  </header>
+
+  <nav>
+    <button class="tab-btn active" data-view="draw">Draw</button>
+    <button class="tab-btn" data-view="browse">Browse</button>
+    <button class="tab-btn" data-view="saved">Saved</button>
+  </nav>
+
+  <main>
+    <div class="view active" id="draw-view">
+      <div id="card-stage">
+        <div id="card">
+          <div class="card-face card-back">
+            <div class="emblem"><div class="emblem-inner"></div></div>
+            <div class="deck-name">Anxious Attachment Deck</div>
+            <div class="tap-hint">tap to reveal</div>
+          </div>
+          <div class="card-face card-front">
+            <button class="fav-btn" id="fav-btn">&#9825;</button>
+            <div class="card-front-inner">
+              <div class="card-num" id="card-num"></div>
+              <div class="card-title" id="card-title"></div>
+              <div class="card-oracle" id="card-oracle"></div>
+              <div class="card-divider"></div>
+              <div class="card-action-label">Try This</div>
+              <div class="card-action" id="card-action"></div>
+              <div class="card-brand-footer">PsychicSoulStar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="controls">
+        <button id="shuffle-btn">Shuffle</button>
+        <button id="draw-btn" class="primary">Draw</button>
+      </div>
+    </div>
+
+    <div class="view" id="browse-view">
+      <div class="grid-list" id="browse-list"></div>
+    </div>
+
+    <div class="view" id="saved-view">
+      <div class="grid-list" id="saved-list"></div>
+    </div>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const ACCESS_HASH = "4de8bf982e19167830ba9b191bde11f66a01295198a666d5c895d76c8fc96085";
+
+const CARDS = [{"id": 1, "title": "The Waiting Mode", "oracle": "Checking your phone will not make them reply faster, but it will keep your nervous system on high alert. You are allowed to live your life while you wait.", "action": "Put your phone in another room or out of sight for exactly 10 minutes."}, {"id": 2, "title": "Fact Check", "oracle": "Your brain is trying to protect you by finding threats in their words. Right now, a short answer is just a short answer, not a hidden message.", "action": "Write down their exact words. Cross out your interpretation. Read only the facts."}, {"id": 3, "title": "Solid Ground", "oracle": "You feel like if you look away, they will leave. But secure connections do not require your constant supervision to survive.", "action": "Press your heels firmly into the floor. Say out loud: \"I am safe even when I am not in control.\""}, {"id": 4, "title": "The Apology Trap", "oracle": "You do not need to say sorry for having needs, asking a question, or simply existing. Your voice belongs here.", "action": "Check your last sent message. If you used the word \"sorry\" unnecessarily, write a revised version without it for your own practice."}, {"id": 5, "title": "Inner Trust", "oracle": "No amount of external validation will fill the cup if there is a hole in the bottom. Today, you must be the one to tell yourself you are okay.", "action": "Wrap your arms around yourself in a firm hug and tap your shoulders left and right 10 times."}, {"id": 6, "title": "Story Mode", "oracle": "Your mind is writing a tragic script based on missing information. You do not have to believe every thought your anxious brain produces.", "action": "Say out loud: \"I am having the thought that they are pulling away,\" to create distance from the fear."}, {"id": 7, "title": "Shifting Gears", "oracle": "Relationship anxiety can freeze your entire day. Breaking the paralysis starts with one movement that has nothing to do with them.", "action": "Stand up and move exactly three items in your room to their correct places."}, {"id": 8, "title": "The Urge to Fix", "oracle": "When tension rises, you rush to fix it so you can feel safe again. Sometimes, letting the dust settle is the most productive choice.", "action": "Set a 2-minute timer. Do absolutely nothing until it rings. Let the discomfort exist."}, {"id": 9, "title": "False Alarm", "oracle": "Your anxiety is treating a relationship worry like a physical threat. Your body is preparing for a tiger that isn't there.", "action": "Clench your fists as hard as you can for 5 seconds, then completely release and let your hands go limp."}, {"id": 10, "title": "Mind Reading", "oracle": "Trying to guess their feelings is exhausting and usually inaccurate. Their emotions are their responsibility to manage and communicate.", "action": "Write down what you are afraid they are thinking, then rip the paper into tiny pieces."}, {"id": 11, "title": "Future Tripping", "oracle": "You are living in a hypothetical future where everything goes wrong. Bring your energy back to the only place you have power: right now.", "action": "Name 3 things you can see, 2 things you can touch, and 1 thing you can hear in the room."}, {"id": 12, "title": "The Double Text", "oracle": "Sending another message will not soothe your anxiety; it will only feed the cycle. The best response right now is no response.", "action": "Put your phone on \"Do Not Disturb\" and drink a full glass of ice-cold water."}, {"id": 13, "title": "Personal Weather", "oracle": "Their bad mood does not mean you did something wrong. You do not have to absorb their emotional weather.", "action": "Imagine an invisible glass wall between you and them. You can see their mood, but it cannot touch you."}, {"id": 14, "title": "Earning Love", "oracle": "You are acting like a resume, constantly trying to prove your worth. True connection does not require a daily performance review.", "action": "Look in a mirror and name one thing you like about yourself that has nothing to do with being helpful to others."}, {"id": 15, "title": "The Comparison Trap", "oracle": "Looking at their past or other people will only manufacture pain. Your relationship is built in the present, not the past.", "action": "Unfollow, mute, or close the tab of the person you are comparing yourself to right now."}, {"id": 16, "title": "Empty Cup", "oracle": "You are pouring all your mental energy into someone else. It is time to recall your energy and give it back to your own life.", "action": "Splash cold water on your face to physically reset your nervous system and snap out of the loop."}, {"id": 17, "title": "People Permanence", "oracle": "Just because they are quiet or out of sight does not mean the bond is gone. Connection exists even in the silence.", "action": "Hold a physical object you love and remind yourself: \"Things still exist even when I cannot see them.\""}, {"id": 18, "title": "Over-Functioning", "oracle": "Doing their work, managing their schedule, or solving their problems keeps you in control, but it prevents true partnership.", "action": "Identify one task you were going to do for them today, and consciously leave it undone."}, {"id": 19, "title": "The Core Fear", "oracle": "Behind your panic is usually a simple fear: \"I am going to be left alone.\" Acknowledge the fear instead of fighting the symptoms.", "action": "Place your hand over your heart and say, \"I see you are scared right now, and I've got you.\""}, {"id": 20, "title": "Reclaiming the Day", "oracle": "You have put your entire day on hold waiting for a sign from them. Press play on your own life again.", "action": "Pick one tiny task you have been avoiding (like throwing away a wrapper) and do it immediately."}, {"id": 21, "title": "Urgency vs. Importance", "oracle": "Your anxiety makes every minor relationship issue feel like a life-or-death emergency. Most things can wait until tomorrow.", "action": "Ask yourself: \"Will this matter in one week?\" If no, delay acting on it for 24 hours."}, {"id": 22, "title": "The Mind Screen", "oracle": "You are getting tangled up in your thoughts. Watch them pass by like cars on a street instead of jumping into traffic.", "action": "Close your eyes. Imagine your anxious thought written on a leaf floating down a river until it disappears."}, {"id": 23, "title": "Hyper-Vigilance", "oracle": "Scanning their every word and micro-expression for signs of rejection is burning you out. You are allowed to turn the radar off.", "action": "Relax your jaw, drop your shoulders away from your ears, and let your stomach soften."}, {"id": 24, "title": "Chasing Closure", "oracle": "You are digging for an answer that will finally make you feel secure. Safety comes from trusting yourself to handle the unknown.", "action": "Write the question you want them to answer on a sticky note, fold it, and put it in a drawer."}, {"id": 25, "title": "The \"Fix Me\" Urge", "oracle": "You are looking to them to regulate your nervous system. Remember that you have the tools to calm your own storm.", "action": "Take a 4-second inhale, hold for 4 seconds, exhale for 4 seconds, and hold for 4 seconds (Box Breathing)."}, {"id": 26, "title": "Over-Explaining", "oracle": "You do not need a five-paragraph essay to justify your choices or feelings. A simple statement is enough.", "action": "If you are drafting a long message, delete half of it. Send only the core point."}, {"id": 27, "title": "Echo Chamber", "oracle": "Ruminating with friends about what a text meant just keeps the anxiety alive. Break the loop by changing the subject.", "action": "Send a meme, a song, or a completely unrelated question to a friend to shift your mental track."}, {"id": 28, "title": "Catastrophizing", "oracle": "A late arrival or a canceled date is a disappointment, not a disaster. Do not let your brain turn a flat tire into a car crash.", "action": "Rate the actual problem from 1 to 10 (1 = mild annoyance, 10 = absolute tragedy). Remind yourself of the true number."}, {"id": 29, "title": "Self-Abandonment", "oracle": "In trying to keep them happy, you have forgotten what you actually want. Your needs are not a burden; they are the foundation.", "action": "Ask yourself out loud: \"What do I actually want to eat, watch, or do right now?\" Do that one thing."}, {"id": 30, "title": "The \"What If\" Spiral", "oracle": "\"What if they leave?\" \"What if they are mad?\" Counter the negative spiral by forcing your brain to imagine a positive alternative.", "action": "Say out loud: \"What if everything works out fine?\" and picture that exact scenario for 10 seconds."}, {"id": 31, "title": "Testing Them", "oracle": "Creating small traps to see if they care will only create resentment. If you need reassurance, ask for it plainly.", "action": "Instead of dropping a hint, write down the direct, simple request you actually want to make."}, {"id": 32, "title": "Emotional Sponge", "oracle": "You are highly tuned to their shifts in mood, absorbing their stress as your own fault. You are not responsible for their bad day.", "action": "Cross your arms over your chest and physically brush off your shoulders, dropping their energy."}, {"id": 33, "title": "The Perfection Myth", "oracle": "You believe that if you are perfect, they won't leave. But real love requires a real human, flaws and all.", "action": "Intentionally do something small imperfectly right now—leave a dish in the sink or write a messy note."}, {"id": 34, "title": "Fear of Conflict", "oracle": "Disagreement is not the end of a relationship; it is how you build a stronger one. Silence breeds resentment, not safety.", "action": "Identify one tiny thing you have been hiding to \"keep the peace.\" Write it down so it is no longer a secret."}, {"id": 35, "title": "Phantom Ring", "oracle": "Your brain is tricking you into hearing phone notifications because it craves dopamine and relief. Break the technological tether.", "action": "Turn your phone completely off (power down) for 2 minutes. Notice that the world does not end."}, {"id": 36, "title": "Rejection Sensitivity", "oracle": "A boundary is not a rejection. \"No\" simply means \"not right now\" or \"not this.\" It does not mean \"I don't care about you.\"", "action": "Repeat this phrase: \"Their boundary is about their capacity, not my worth.\""}, {"id": 37, "title": "Over-Giving", "oracle": "You are trying to buy their loyalty with favors, gifts, and extreme availability. Stop funding the relationship single-handedly.", "action": "Next time they ask for a favor, practice saying: \"Let me check my schedule and get back to you.\""}, {"id": 38, "title": "Mirroring", "oracle": "You are adopting their hobbies, opinions, and habits to ensure compatibility. Reconnect with the person you were before them.", "action": "Listen to one song that you absolutely love but they dislike, and enjoy it fully."}, {"id": 39, "title": "The Worst-Case Scenario", "oracle": "Your brain thinks preparing for the worst will make it hurt less. It won't. It just ruins the present moment.", "action": "Look around and find 3 pieces of evidence that you are currently safe and okay in this exact room."}, {"id": 40, "title": "Smothering", "oracle": "Holding on too tight restricts the oxygen a relationship needs to breathe. Let them have space; it makes the return much sweeter.", "action": "Cancel one attempt to check in or follow up today. Ride out the urge to control the distance."}, {"id": 41, "title": "Value Assessment", "oracle": "You are tying your self-esteem to their availability. Your value does not fluctuate based on who is paying attention to you.", "action": "Look at your hands and name 2 skills or tasks these hands know how to do well."}, {"id": 42, "title": "The Silent Treatment Panics", "oracle": "Silence feels like a punishment, but sometimes it is just silence. Do not fill their quiet space with your panic.", "action": "Hum a low note for 30 seconds. The vibration calms your body's fight-or-flight response."}, {"id": 43, "title": "Nostalgia Trap", "oracle": "You are holding onto how they acted in the first month to excuse how they act now. Deal with the person in front of you today.", "action": "Write down one factual sentence about how the relationship is operating *right now*, ignoring the past."}, {"id": 44, "title": "Earning Rest", "oracle": "You feel like you can't relax until the relationship feels entirely secure. Rest is a biological need, not a reward for good behavior.", "action": "Lie flat on the floor for 60 seconds with your eyes closed. You do not have to earn this minute."}, {"id": 45, "title": "Outsourcing Decisions", "oracle": "You ask for their opinion on everything because you fear making the \"wrong\" choice. Reclaim your decision-making power.", "action": "Make your next small decision (what to eat, what to wear) entirely on your own without asking anyone."}, {"id": 46, "title": "All-or-Nothing", "oracle": "Your brain says they either love you perfectly or they hate you entirely. Relationships exist in the messy, human middle.", "action": "Draw a line. Write \"Perfect\" on one end, \"Terrible\" on the other. Mark an X in the middle and write \"Human.\""}, {"id": 47, "title": "The Resentment Build-Up", "oracle": "You say yes when you mean no, and then feel bitter when they don't appreciate it. You are the architect of your own resentment.", "action": "Identify one thing you are doing purely out of obligation today, and decide to drop it."}, {"id": 48, "title": "Hyper-Independence Flip", "oracle": "When anxiety peaks, you suddenly want to push them away and do everything alone. This is just a defense mechanism in disguise.", "action": "Ask for a tiny, low-stakes piece of help from someone (not necessarily your partner) today."}, {"id": 49, "title": "Checking the Score", "oracle": "Keeping a mental tally of who texted first or who planned the date is exhausting. Connection is a dance, not a math equation.", "action": "Delete the mental scoreboard for the next 24 hours. Just let things happen without measuring them."}, {"id": 50, "title": "Fear of the End", "oracle": "You are so afraid the relationship will end that you are forgetting one vital truth: even if it does, you will survive. You always have.", "action": "Remind yourself of one incredibly hard thing you have survived in the past. Say, \"I can handle anything.\""}, {"id": 51, "title": "Trusting the Good", "oracle": "When things are going well, your anxiety waits for the other shoe to drop. Let yourself actually enjoy the peace.", "action": "Recall a genuinely good moment from the past week. Hold that image in your mind for 15 seconds."}, {"id": 52, "title": "Coming Home", "oracle": "The most secure attachment you will ever build is the one you have with yourself. You are the safe place you have been looking for.", "action": "Place both hands over your heart, take a deep breath, and say: \"I am here. I am not going anywhere.\""}];
+
+let currentCard = null;
+let isFlipped = false;
+let appInited = false;
+let favorites = JSON.parse(localStorage.getItem('aad_favorites') || '[]');
+
+// ---------- SHA-256 ----------
+async function sha256(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ---------- Gate ----------
+document.getElementById('unlock-btn').addEventListener('click', tryUnlock);
+document.getElementById('access-input').addEventListener('keydown', e => {
+  if(e.key === 'Enter') tryUnlock();
+});
+
+async function tryUnlock(){
+  const val = document.getElementById('access-input').value.trim().toUpperCase();
+  const errEl = document.getElementById('gate-error');
+  if(!val){ errEl.textContent = 'Please enter your access code.'; return; }
+  const hash = await sha256(val);
+  if(hash === ACCESS_HASH){
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    sessionStorage.setItem('aad_unlocked', '1');
+    initApp();
+  } else {
+    errEl.textContent = 'That code did not match. Please try again.';
+  }
+}
+
+if(sessionStorage.getItem('aad_unlocked') === '1'){
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  initApp();
+}
+
+// ---------- Toast ----------
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ---------- Nav ----------
+function initNav(){
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.view + '-view').classList.add('active');
+      if(btn.dataset.view === 'browse') renderBrowse();
+      if(btn.dataset.view === 'saved') renderSaved();
+    });
+  });
+}
+
+// ---------- Draw / Card ----------
+function pickNewCard(){
+  let idx;
+  do {
+    idx = Math.floor(Math.random() * CARDS.length);
+  } while (currentCard && CARDS[idx].id === currentCard.id);
+  currentCard = CARDS[idx];
+}
+
+function setCardContent(){
+  document.getElementById('card-num').textContent = 'Card ' + String(currentCard.id).padStart(2,'0') + ' / 52';
+  document.getElementById('card-title').textContent = currentCard.title;
+  document.getElementById('card-oracle').textContent = currentCard.oracle;
+  document.getElementById('card-action').textContent = currentCard.action;
+  updateFavIcon();
+}
+
+function drawCard(){
+  const cardEl = document.getElementById('card');
+  isFlipped = false;
+  cardEl.classList.remove('flipped');
+
+  pickNewCard();
+  setTimeout(setCardContent, 400);
+
+  document.getElementById('counter').textContent = '\u2014 / 52';
+}
+
+function flipCard(){
+  if(!currentCard) return;
+  isFlipped = !isFlipped;
+  document.getElementById('card').classList.toggle('flipped', isFlipped);
+  document.getElementById('counter').textContent = isFlipped
+    ? String(currentCard.id).padStart(2,'0') + ' / 52'
+    : '\u2014 / 52';
+}
+
+function shuffleDeck(){
+  const cardEl = document.getElementById('card');
+  isFlipped = false;
+  cardEl.classList.remove('flipped');
+  document.getElementById('counter').textContent = '\u2014 / 52';
+
+  cardEl.classList.add('shaking');
+  setTimeout(() => cardEl.classList.remove('shaking'), 500);
+
+  pickNewCard();
+  setTimeout(setCardContent, 560);
+
+  showToast('Deck shuffled');
+}
+
+function updateFavIcon(){
+  const btn = document.getElementById('fav-btn');
+  if(!currentCard) return;
+  btn.innerHTML = favorites.includes(currentCard.id) ? '&#9829;' : '&#9825;';
+}
+
+function toggleFavorite(){
+  if(!currentCard) return;
+  const idx = favorites.indexOf(currentCard.id);
+  if(idx > -1){
+    favorites.splice(idx, 1);
+    showToast('Removed from Saved');
+  } else {
+    favorites.push(currentCard.id);
+    showToast('Saved');
+  }
+  localStorage.setItem('aad_favorites', JSON.stringify(favorites));
+  updateFavIcon();
+}
+
+// ---------- Browse ----------
+function renderBrowse(){
+  const list = document.getElementById('browse-list');
+  list.innerHTML = '';
+  CARDS.forEach(c => {
+    const item = document.createElement('div');
+    item.className = 'grid-item';
+    item.innerHTML = `
+      <div class="grid-item-text">
+        <div class="grid-item-num">Card ${String(c.id).padStart(2,'0')}</div>
+        <div class="grid-item-title">${c.title}</div>
+      </div>
+      <div class="grid-item-star">${favorites.includes(c.id) ? '&#9829;' : ''}</div>
+    `;
+    item.addEventListener('click', () => openCardFromList(c));
+    list.appendChild(item);
+  });
+}
+
+// ---------- Saved ----------
+function renderSaved(){
+  const list = document.getElementById('saved-list');
+  list.innerHTML = '';
+  const savedCards = CARDS.filter(c => favorites.includes(c.id));
+  if(savedCards.length === 0){
+    list.innerHTML = '<div class="empty-state">No saved cards yet.<br>Tap the heart on a card to keep it here.</div>';
+    return;
+  }
+  savedCards.forEach(c => {
+    const item = document.createElement('div');
+    item.className = 'grid-item';
+    item.innerHTML = `
+      <div class="grid-item-text">
+        <div class="grid-item-num">Card ${String(c.id).padStart(2,'0')}</div>
+        <div class="grid-item-title">${c.title}</div>
+      </div>
+      <div class="grid-item-star">&#9829;</div>
+    `;
+    item.addEventListener('click', () => openCardFromList(c));
+    list.appendChild(item);
+  });
+}
+
+function openCardFromList(c){
+  currentCard = c;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelector('.tab-btn[data-view="draw"]').classList.add('active');
+  document.getElementById('draw-view').classList.add('active');
+
+  setCardContent();
+
+  isFlipped = true;
+  document.getElementById('card').classList.add('flipped');
+  document.getElementById('counter').textContent = String(c.id).padStart(2,'0') + ' / 52';
+}
+
+// ---------- Init ----------
+function initApp(){
+  if(appInited) return;
+  appInited = true;
+  initNav();
+  document.getElementById('card').addEventListener('click', e => {
+    if(e.target.closest('.fav-btn')) return;
+    flipCard();
+  });
+  document.getElementById('fav-btn').addEventListener('click', toggleFavorite);
+  document.getElementById('draw-btn').addEventListener('click', drawCard);
+  document.getElementById('shuffle-btn').addEventListener('click', shuffleDeck);
+  pickNewCard();
+  setCardContent();
+}
+</script>
+</body>
+</html>
